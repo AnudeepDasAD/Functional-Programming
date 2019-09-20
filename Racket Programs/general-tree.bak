@@ -1,0 +1,25 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname general-tree) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+(define-struct opnode (op left right))
+
+(define equation (make-opnode '* 10 (make opnode '+ 2 5)))
+
+(define (process/tree2 t)
+  (cond
+    [(number? t) (process/number t)]
+    [(symbol=? (opnode-op t) '+) (process/plus t)]
+    [(symbol=? (opnode-op t) '*) (process/mult t)]))
+
+(define (process/number n)
+  n)
+
+
+;;takes whatever is on the left and adds it to the right
+(define (process/plus opn)
+  (+ (process-tree2 (opnode-left opn)) (process/tree2 (opnode-right))))
+
+(define (process/mult opn)
+  (* (process-tree2 (opnode-left opn)) (process/tree2 (opnode-right))))
+
+(process/tree2 equation)

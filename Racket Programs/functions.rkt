@@ -1,0 +1,34 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname functions) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+;; The following is a formula for the volume of a cone using it's height and the radius of its bottom face as parameters (Question 2a)
+
+(define (volume radius height)
+  (* 1/3 pi(expt radius 2) height))
+
+;;Question 2b, the formula finds the escape speed from large mass (Mass_bod) with a certain radius (planet)
+
+(define (escape Mass_bod radius)
+  (sqrt (/ (* 2 6.674e-11 Mass_bod) radius)))
+
+;;Question 2c
+
+;; (personal note) for the exponent, there are two values, the base and the exponent
+(define(Stirling n)
+  (*(sqrt (* 2 pi n))
+    (expt (/ n e) n)))
+
+;;Question 2d, calculates the monthly payment on a credit card
+(define (payment principal rate num_payments)
+  (* principal (/ (* rate (expt (+ 1 rate) num_payments))
+                  (+ (expt (+ 1 rate) num_payments) 1))))
+
+;;Question 2e, Partition size approximation for any number n
+
+;;NOTE TO SELF:  EXP IS EXPONENTIAL (uses e) expt is exponent 
+
+(define (partition-size-approximation n)
+  (* (/ 1 (* 4 n (sqrt 3)))
+     (exp (* pi (sqrt (/ (* 2 n) 3))))))
+
+

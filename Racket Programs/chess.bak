@@ -1,0 +1,14 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname chess) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+;;
+;;************************************
+;;   Anudeep Das (20782887)
+;;   CS 135 Fall 2018
+;;   Assignment 03, Problem 2
+;;*************************************
+
+(define-struct square (row column))
+;; A Square is a (make-square Nat Sym)
+;; requires: 1 <= row <= 8
+;; column: (anyof 'a 'b 'c 'd 'e 'f 'g 'h)

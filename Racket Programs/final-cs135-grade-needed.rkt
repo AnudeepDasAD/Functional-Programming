@@ -1,0 +1,7 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname final-cs135-grade-needed) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+;Question 4b, finds the minimum grade for the final exam to get an overall 60%
+
+(define (Grade_Needed m1 m2 assi)
+  (/ (- 60 (* 0.1 m1) (* 0.2 m2) (* 0.2 assi)) 0.45))

@@ -1,0 +1,15 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname park-rentals) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+
+
+
+(define-struct bicycle (make model serial-number))
+;; A Bicycle is a (make-bicycle Str Str Nat)
+(define-struct boat (type serial-number))
+;; A Boat is a (make-boat Sym Nat)
+;; requires: type is 'paddle-boat or 'canoe
+(define-struct horse (name serial-number capacity stamina))
+;; A Horse is a (make-horse Str Nat Nat Num)
+;; requires: stamina > 0, capacity > 0
+;; A Rental is (anyof Bicycle Boat Horse)

@@ -1,0 +1,235 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname midterm2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+(define-struct s (a b c))
+(define (build z) (make-s false y z))
+(define (f x) (* x (add1 x)))
+(define (self a) (cons a a))
+
+(define (fiddle a)
+  (cond
+    [(> (s-a a) (s-b a)) (fiddle (make-s (s-b a) (s-a a) (s-c a)))]
+    [(> (s-b a) (s-c a)) (fiddle (make-s (s-a a) (s-c a) (s-b a)))]
+    [else (list (s-a a) (s-b a) (s-c a))]))
+
+(define x 5)
+(define y 7)
+
+(define q1 (list 1 (list (list 2) 3) 4))
+
+;(first (first (first (rest q1))))
+
+;(equal? q1 (cons 1 (cons (cons (cons 2 empty) (cons 3 empty)) (cons 4 empty))))
+
+
+(define q (make-s false x 'fish))
+
+
+ ;(+ (f x) x (* x 2))
+
+;(first (rest (self empty)))
+
+;(cond [(s-a q) (s-b q)]
+ ;     [else (s-c q)])
+
+
+(define (safe-make-posn x y)
+  (cond
+    [(and (number? x) (number? y)) (make-posn x y)]
+    [else (error "numerical arguments required")]))
+
+;(safe-make-posn 4 'Sphere)
+
+;(s-b (first (rest (cons (rest (cons 1 empty)) (cons q empty)))))
+;(fiddle (make-s y x 3))
+
+
+(define (add nat1 nat2)
+  (cond [(= nat2 0) nat1]
+        [else (add1 (add nat1 (sub1 nat2)))]))
+
+;(check-expect (add 5 3) 8);
+;(check-expect (add 100 20) 120)
+
+(define (compute-average glist1 glist2)
+  (cond [(empty? glist1) glist2]
+        [(empty? glist2) glist1]
+        [(string>? (first (first glist1)) (first (first glist2)))
+         (cons (first glist2) (compute-average glist1 (rest glist2)))]
+        [(string=? (first (first glist1)) (first (first glist2)))
+         (cons (cons (first(first glist1)) (cons (/ (+ (first(rest(first glist2))) (first(rest(first glist1)))) 2) empty))
+               (compute-average (rest glist1) (rest glist2)))]
+        [else (cons (first glist1) (compute-average (rest glist1) glist2))]))
+
+;(compute-average (list (list "Jason" 95) (list "Jimmy" 69)) (list (list "Anne" 90) (list "Jason"
+;87)))
+
+;(compute-average (list (list "Jason" 100) (list "Jimmy" 69)) (list (list "Jason" 100) (list
+;"Jimmy" 69)))
+
+;(compute-average (list (list "Jason" 99) (list "Jimmy" 70)) (list (list "Anne" 90) (list "Jason"
+;100)))
+
+(define (strings-equal? los)
+  (cond [(empty? los) false]
+        [(empty? (rest los)) true]
+        [(string=? (first los) (first (rest los))) (strings-equal? (rest los))]
+        [else false]))
+
+;(check-expect (strings-equal? '( "hello" "hello" "hello")) true);
+;(check-expect (strings-equal? '( "hello" "hell" "hello")) false)
+;(check-expect (strings-equal? '( "hello" "hello")) true)
+
+(define-struct apple (price juicy?))
+(define-struct pen (price colour))
+
+;(define (total-price loi)
+;  (cond [(empty? loi) 0]
+ ;       [(apple? (first loi)) (+ (apple-price (first loi)) (total-price (rest loi)))]
+  ;      [else (+ (pen-price (first loi)) (total-price (rest loi)))]))
+;
+;(check-expect(total-price (list (make-apple 99 true) (make-pen 1 'blue))) 100)
+
+ ; (define (lon->loapp lon)
+  ;  (cond [(empty? lon) empty]
+   ;       [else (cons (make-apple (first lon) true) (lon->loapp (rest lon)))]))
+;
+ ; (lon->loapp (cons 1 (cons 2 (cons 3 (cons 4 empty)))))
+
+
+;(define (remove-pen lop mypen)
+ ; (cond [(empty? lop) empty]
+  ;      [(equal? (first lop) mypen)
+   ;      (remove-pen (rest lop) mypen)]
+    ;    [else
+     ;    (cons (first lop) (remove-pen (rest lop) mypen))]))
+
+;(remove-pen (cons (make-pen 99 'green) (cons (make-pen 3 'red) empty)) (make-pen 9 'green))
+
+;(define (ones-on-diagonal n)
+ ; (make-rows 0 n))
+
+;(define (make-rows current-row n)
+ ; (cond [(= current-row n) empty]
+ ;       [else (cons (make-cols current-row 0 n) (make-rows (add1 current-row) n))]))
+
+;(define (make-cols current-row current-col n)
+ ; (cond [(= current-col n) empty]
+  ;      [(= current-col current-row) (cons 1 (make-cols current-row (add1 current-col) n))]
+   ;     [else (cons 0 (make-cols current-row (add1 current-col) n))]))
+
+;(check-expect (ones-on-diagonal 4) (list (list 1 0 0 0)
+ ;                                        (list 0 1 0 0)
+  ;                                       (list 0 0 1 0)
+   ;                                      (list 0 0 0 1)))
+
+(define (set-merge seq1 seq2)
+  (remove-dup (cond [(and (empty? seq1) (empty? seq2)) empty]
+                    [(and (empty? seq1) (cons? seq2)) seq2]
+                    [(and (cons? seq1) (empty? seq2)) seq1]
+                    [else
+                     (cond [(<= (first seq1) (first seq2)) (cons (first seq1) (set-merge (rest seq1) seq2))]
+                           [else (cons (first seq2) (set-merge seq1 (rest seq2)))])])))
+
+(define (remove-dup seq)
+  (cond [(empty? seq) empty]
+        [(empty? (rest seq)) (cons (first seq) empty)]
+        [(= (first seq) (first (rest seq))) (remove-dup (rest seq))]
+        [else (cons (first seq) (remove-dup (rest seq)))]))
+
+
+;(set-merge '(1 2 3 4 5) '(3 4 5 6 7))
+  
+                    
+(define (sort lox)
+  (cond [(empty? lox) empty]
+        [else (insert (first lox) (sort (rest lox)))]))
+
+(define (insert element lox)
+  (cond [(empty? lox) (cons element lox)]
+        [(< element (first lox)) (cons element lox)]
+        [else (cons (first lox) (insert element (rest lox)))]))
+
+;(sort '(1 2 5 4 3 6 7 8 9 100 -9))
+
+(define (at-least? n elem lst)
+  (cond [(empty? lst) false]
+        [(<= n 0) true]
+        [(equal? (first lst) elem) (at-least? (sub1 n) elem (rest lst))]
+        [else (at-least? n elem (rest lst))]))
+
+;(at-least? 3 2 (list 4 2 2 3 2 4))
+
+(define-struct quux (foo bar))
+
+(define (sum-quux myquux)
+  (cond [(symbol? myquux) 0]
+        [(number? myquux) myquux]
+        [(boolean? myquux) 0]
+        [else (+ (sum-quux (quux-foo myquux)) (sum-quux (quux-bar myquux)))]))
+         
+;(sum-quux (make-quux 7 (make-quux (make-quux false 3) (make-quux (make-quux 'hi 7) (make-quux true 8)))))       
+  
+(define (procession lst1 lst2)
+  (cond [(and (empty? lst1) (empty? lst2)) empty]
+        [(and (empty? lst1) (cons? lst2)) (cons (list (first lst2)) (procession lst1 (rest lst2)))]
+        [(and (empty? lst2) (cons? lst1)) (cons (list (first lst1)) (procession (rest lst1) lst2))]
+        [(string=? (first lst1) "Mace") (cons (list "Mace") (procession (rest lst1) lst2))]
+        [(string=? (first lst2) "Mace") (cons (list "Mace") (procession  lst1 (rest lst2)))]
+        [else (cons (list(first lst1) (first lst2)) (procession (rest lst1) (rest lst2)))]))
+
+;(procession '("Dave" "Paul" "Kate" "Troy" "Byron") '("Ian" "Mary" "Mace" "Craig"))
+
+
+(define (subset? set1 set2)
+  (cond [(empty? set1) true]
+        [(empty? set2) false]
+        [(< (first set2) (first set1)) (subset? set1 (rest set2))]
+        [(= (first set2) (first set1)) (subset? (rest set1) (rest set2))]
+        [else (subset? (rest set1) (rest set2))]))
+
+(check-expect (subset? '(1 4) '(1 2 4 5 7)) true)
+(check-expect (subset? '(1 2 3 4 5) '(1 3 5 6)) false)
+
+(define nasdaq '((GOOG 992.00) (AMZN 1006.34) (AAPL 159.88) (MSFT 77.65)))
+
+(define (update-stock ticker new-price stockmarket)
+  (cond [(empty? stockmarket) (cons (list ticker new-price) empty)]
+        [(symbol=? (first (first stockmarket)) ticker)
+         (cons (list ticker new-price) (rest stockmarket))]
+        [else (cons (list(first (first stockmarket)) (first (rest(first stockmarket)))) (update-stock ticker new-price (rest stockmarket)))]))
+
+;(update-stock 'MSFT 90 nasdaq)
+;(update-stock 'ENRN 100 nasdaq)
+                              
+;(define (times-table nrows ncols)
+ ; (make-rows 0 nrows ncols))
+
+;(define (make-rows current-row nrows ncols)
+ ; (cond [(= current-row nrows) empty]
+  ;      [else (cons (make-cols 0 ncols current-row) (make-rows (add1 current-row) nrows ncols))]))
+
+;(define (make-cols current-col ncols current-row)
+ ; (cond [(= current-col ncols) empty]
+  ;      [else (cons (* current-col current-row) (make-cols (add1 current-col) ncols current-row))]))
+
+;(times-table 10 10)
+
+
+;(define (2d-search element lst)
+ ; (cond [(empty? lst) false]
+ ;        ;if not in the row column, it will recurse on the next one 
+  ;      [(not(search-col element (first lst))) (2d-search element (rest lst))]
+   ;     [else true]))
+
+;(define (search-col element col)
+ ; (cond [(empty? col) false]
+  ;      [(= element (first col)) true]
+   ;     [else (search-col element (rest col))]))
+
+(define (get-table-chunk table col-start col-end row-start row-end)
+  (cond [(= row-end 0) empty]
+        [(= row-start
+
+
+ 

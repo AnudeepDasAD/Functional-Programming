@@ -1,0 +1,92 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname laundry) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #t)))
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+;;
+;;************************************
+;;   Anudeep Das (20782887)
+;;   CS 135 Fall 2018
+;;   Assignment 02, Problem 3
+;;*************************************
+
+;;PART A
+;;Some constants follow
+
+
+(define max-days-in-hamper-socks 4)
+(define max-shirt-days-in-hamper 10)
+(define min-shirt-days-in-hamper 2)
+
+
+;; (acceptable-to-wear/cond? smell clothing-type days-in-hamper) determines
+;;    whether an item of clothing is okay to wear based on whether or
+;;    it is smelly, the type of clothing it is, and the number of days it has
+;;    been in the hamper. An output of true means that it is acceptable to wear
+
+;;acceptable-to-wear/cond?: Bool Sym Nat -> Bool
+
+(check-expect (acceptable-to-wear/cond? false 'shirt 8) true)
+(check-expect (acceptable-to-wear/cond? false 'shirt 2) false)
+(check-expect (acceptable-to-wear/cond? false 'sock 11) false)
+
+(define (acceptable-to-wear/cond? smell clothing-type days-in-hamper)
+  (cond [smell false]
+        ;if anything stays more than 10 days, it will be false
+        [(>= days-in-hamper max-shirt-days-in-hamper) false] 
+        [(symbol=? clothing-type 'socks)
+         (< days-in-hamper max-days-in-hamper-socks)]
+        ;if too many days in hamper, the answer will be false (that's wanted)
+        [(symbol=? clothing-type 'shirt)
+         (> days-in-hamper min-shirt-days-in-hamper)]
+        [else true] ;for unexpected input
+        
+  )
+)
+
+(check-expect (acceptable-to-wear/cond? true 'socks 2) false)
+(check-expect (acceptable-to-wear/cond? false 'socks 4) false)
+(check-expect (acceptable-to-wear/cond? false 'shirt 5) true)
+(check-expect (acceptable-to-wear/cond? false 'shirt 1) false)
+(check-expect (acceptable-to-wear/cond? false 'shirt 9) true)
+(check-expect (acceptable-to-wear/cond? false 'socks 11) false)
+(check-expect (acceptable-to-wear/cond? false 'socks 3) true)
+
+
+;;Part B
+
+;;(acceptable-to-wear/bool? smell clothing-type days-in-hamper)
+;;    is identical in purpose to acceptable-to-wear/cond? except it only uses
+;;    and, or, or not. 
+;;    It determines whether an item of clothing is okay to wear based on whether
+;;    or it is smelly, the type of clothing it is, and the number of days it has
+;;    been in the hamper. An output of true means that it is acceptable to wear.
+
+;;acceptable-to-wear/bool?: Bool Sym Nat -> Bool
+
+
+(check-expect (acceptable-to-wear/bool? false 'shirt 8) true)
+(check-expect (acceptable-to-wear/bool? false 'shirt 2) false)
+
+(define (acceptable-to-wear/bool? smell clothing-type days-in-hamper)
+  (and (not smell)  ;Returns false if smell is true
+  (not(or (and (symbol=? clothing-type 'socks)
+           (>= days-in-hamper max-days-in-hamper-socks))   
+      (and (symbol=? clothing-type 'shirt)
+           (or (>= days-in-hamper max-shirt-days-in-hamper)
+               (<= days-in-hamper min-shirt-days-in-hamper))
+           
+       )
+      )
+     )
+  )
+ )
+
+(check-expect (acceptable-to-wear/bool? true 'socks 2) false)
+(check-expect (acceptable-to-wear/bool? false 'socks 4) false)
+(check-expect (acceptable-to-wear/bool? false 'shirt 5) true)
+(check-expect (acceptable-to-wear/bool? false 'shirt 1) false)
+(check-expect (acceptable-to-wear/bool? false 'shirt 9) true)
+(check-expect (acceptable-to-wear/bool? false 'socks 11) false)
+(check-expect (acceptable-to-wear/bool? false 'socks 3) true)
+  
